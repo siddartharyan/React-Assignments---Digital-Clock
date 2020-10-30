@@ -1,22 +1,28 @@
 import React, { Component, useEffect, useRef, useState } from "react";
 import "../styles/App.css";
-const App = () => {
-  let d = new Date().toLocaleTimeString();
-  let [ctime, setTime] = useState(d);
-  let id = useRef(null);
-  useEffect(() => {
-    id.current = setInterval(() => {
-      let n = new Date().toLocaleTimeString();
-      setTime(n);
-    }, 1000);
-    return () => {
-      clearInterval(id);
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      time: new Date().toLocaleTimeString(),
+      id: null
     };
-  });
-  return (
-    <div className="Clock">
-      <h3 id="time">{ctime}</h3>
-    </div>
-  );
-};
+  }
+  componentDidMount() {
+    let id1 = setInterval(() => {
+      this.setState({ time: new Date().toLocaleTimeString() });
+    }, 1000);
+    this.setState({ id: id1 });
+  }
+  componentWillUnmount() {
+    clearInterval(this.state.id);
+  }
+  render() {
+    return (
+      <div className="Clock">
+        <h3 id="time">{this.state.time}</h3>
+      </div>
+    );
+  }
+}
 export default App;
